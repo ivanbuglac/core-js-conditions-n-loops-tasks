@@ -468,37 +468,32 @@ function shuffleChar(str, iterations) {
  * @returns {number} The nearest larger number, or original number if none exists.
  */
 function getNearestBigger(number) {
-  const str = `${number}`;
-  const arr = [];
-  for (let i = 0; i < str.length; i += 1) {
-    arr[i] = +str[i];
-  }
-  let elem;
+  const numArr = Array.from(`${number}`, (el) => Number(el));
   let index;
-  for (let i = arr.length - 1; i > 0; i -= 1) {
-    if (arr[i - 1] < arr[i]) {
-      elem = arr[i - 1];
+  let el;
+  for (let i = numArr.length - 1; i > 0; i -= 1) {
+    if (numArr[i] > numArr[i - 1]) {
       index = i - 1;
+      el = numArr[index];
       break;
     }
   }
-  const left = arr.splice(0, index);
-  const right = arr.sort((a, b) => a - b);
-  let min;
-  let minIndex;
-  for (let i = 0; i < right.length; i += 1) {
-    if (right[i] === elem) {
-      min = right[i + 1];
-      minIndex = i + 1;
-      break;
+  const leftArr = numArr.splice(0, index);
+  const rightPart = numArr.sort((a, b) => a - b);
+  let nextEl;
+  let indexNextEl;
+  for (let i = 0; i < rightPart.length; i += 1) {
+    if (rightPart[i] === el) {
+      nextEl = rightPart[i + 1];
+      indexNextEl = i + 1;
     }
   }
-
-  return +[
-    ...left,
-    min,
-    ...[...right.splice(0, minIndex), ...right.splice(1)],
-  ].join('');
+  const rightArr = [
+    ...rightPart.splice(0, indexNextEl),
+    ...rightPart.splice(1),
+  ];
+  const resNumber = +[...leftArr, nextEl, ...rightArr].join('');
+  return resNumber;
 }
 
 module.exports = {
